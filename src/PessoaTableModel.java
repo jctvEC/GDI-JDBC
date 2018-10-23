@@ -5,27 +5,27 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 
-public class FilmeTableModel extends AbstractTableModel {
+public class PessoaTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 	
-	/* Lista de filmes que representam as linhas. */
-    private List<Filme> linhas;
+	/* Lista de pessoas que representam as linhas. */
+    private List<Pessoa> linhas;
  
     /* Array de Strings com o nome das colunas. */
     private String[] colunas = new String[]{
-    			"Codigo", "Titulo", "Genero"
+    			"ID", "Nome"
     		};
  
-    /* Cria um FilmeTableModel vazio. */
-    public FilmeTableModel() {
-        linhas = new ArrayList<Filme>();
+    /* Cria um PessoaTableModel vazio. */
+    public PessoaTableModel() {
+        linhas = new ArrayList<Pessoa>();
     }
  
-    /* Cria um FilmeTableModel carregado com 
-     * a lista de filmes especificada. */
-    public FilmeTableModel(List<Filme> listaDeFilme) {
-        linhas = new ArrayList(listaDeFilme);
+    /* Cria um PessoaTableModel carregado com 
+     * a lista de pessoas especificada. */
+    public PessoaTableModel(List<Pessoa> listaDePessoa) {
+        linhas = new ArrayList(listaDePessoa);
     }
  
     /* Retorna a quantidade de colunas. */
@@ -38,7 +38,7 @@ public class FilmeTableModel extends AbstractTableModel {
     /* Retorna a quantidade de linhas. */
     @Override
     public int getRowCount() {
-        // Retorna o tamanho da lista de filmes.  
+        // Retorna o tamanho da lista de pessoas.  
         return linhas.size();
     }
  
@@ -60,24 +60,23 @@ public class FilmeTableModel extends AbstractTableModel {
    
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Filme filme = linhas.get(rowIndex);
+        Pessoa pessoa = linhas.get(rowIndex);
  
         // Retorna o campo referente a coluna especificada.  
-        // Aqui é feito um switch para verificar qual é a coluna  
-        // e retornar o campo adequado. As colunas são as mesmas  
+        // Aqui ï¿½ feito um switch para verificar qual ï¿½ a coluna  
+        // e retornar o campo adequado. As colunas sï¿½o as mesmas  
         // que foram especificadas no array "colunas".  
         switch (columnIndex) {
  
             // Seguindo o exemplo: "Tipo","Data de Cadastro", "Nome", "Idade"};  
         	case 0:
-        		return filme.getCod();
+        		return pessoa.getID();
         	case 1:
-                return filme.getTitulo();
-            case 2:
-                return filme.getGenero();
+                return pessoa.getNome();
+            
  
             default:
-                // Isto não deveria acontecer...  
+                // Isto nï¿½o deveria acontecer...  
                 throw new IndexOutOfBoundsException("columnIndex out of bounds");
         }
     }
@@ -85,29 +84,26 @@ public class FilmeTableModel extends AbstractTableModel {
     @Override
 //modifica na linha e coluna especificada  
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        Filme filme = linhas.get(rowIndex); // Carrega o item da linha que deve ser modificado  
+        Pessoa pessoa = linhas.get(rowIndex); // Carrega o item da linha que deve ser modificado  
  
         switch (columnIndex) { // Seta o valor do campo respectivo  
         	case 0:
-        		filme.setCod(aValue.toString());
+        		pessoa.setID(aValue.toString());
         	case 1:
-                filme.setTitulo(aValue.toString());
-            case 2:
-                filme.setGenero(aValue.toString());
+                pessoa.setNome(aValue.toString());
                  
             default:
-            // Isto não deveria acontecer...               
+            // Isto nï¿½o deveria acontecer...               
         }
         fireTableCellUpdated(rowIndex, columnIndex);
     }
  
     //modifica na linha especificada  
-    public void setValueAt(Filme aValue, int rowIndex) {
-        Filme filme = linhas.get(rowIndex); // Carrega o item da linha que deve ser modificado  
+    public void setValueAt(Pessoa aValue, int rowIndex) {
+        Pessoa pessoa = linhas.get(rowIndex); // Carrega o item da linha que deve ser modificado  
  
-        filme.setCod(aValue.getCod());
-        filme.setTitulo(aValue.getTitulo());
-        filme.setGenero(aValue.getGenero());
+        pessoa.setID(aValue.getID());
+        pessoa.setNome(aValue.getNome());
  
         fireTableCellUpdated(rowIndex, 0);
         fireTableCellUpdated(rowIndex, 1);
@@ -125,12 +121,12 @@ public class FilmeTableModel extends AbstractTableModel {
         return false;
     }
  
-    public Filme getFilme(int indiceLinha) {
+    public Pessoa getPessoa(int indiceLinha) {
         return linhas.get(indiceLinha);
     }
  
     /* Adiciona um registro. */
-    public void addFilme(Filme a) {
+    public void addPessoa(Pessoa a) {
         // Adiciona o registro.  
         linhas.add(a);
  
@@ -140,19 +136,19 @@ public class FilmeTableModel extends AbstractTableModel {
     }
  
     /* Remove a linha especificada. */
-    public void removeFilme(int indiceLinha) {
+    public void removePessoa(int indiceLinha) {
         linhas.remove(indiceLinha);
  
         fireTableRowsDeleted(indiceLinha, indiceLinha);
     }
  
     /* Adiciona uma lista de Cliente ao final dos registros. */
-    public void addListaDeFilme(List<Filme> filme) {
+    public void addListaDePessoa(List<Pessoa> pessoa) {
         // Pega o tamanho antigo da tabela.  
         int tamanhoAntigo = getRowCount();
  
         // Adiciona os registros.  
-        linhas.addAll(filme);
+        linhas.addAll(pessoa);
  
         fireTableRowsInserted(tamanhoAntigo, getRowCount() - 1);
     }

@@ -1,12 +1,12 @@
 import java.awt.image.BufferedImage;
 
-public class Filme {
+public class Pessoa {
 
 	private Integer ID;
 	private String nome;
 	private BufferedImage foto;
 	
-	public Filme(int ID, String nome, BufferedImage foto) {
+	public Pessoa(int ID, String nome, BufferedImage foto) {
 		super();
 		this.ID = ID;
 		this.nome = nome;
@@ -22,10 +22,10 @@ public class Filme {
 	public void setID(String ID) {
 		this.ID = new Integer(ID);
 	}
-	public String getnome() {
+	public String getNome() {
 		return nome;
 	}
-	public void setnome(String nome) {
+	public void setNome(String nome) {
 		this.nome = nome;
 	}
 	public BufferedImage getFoto() {

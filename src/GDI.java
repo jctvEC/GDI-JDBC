@@ -80,14 +80,14 @@ public class GDI extends JFrame {
 		}
 	}
 	
-	public List<Filme> getFilmes() {
+	public List<Pessoa> getFilmes() {
 		tabela.limpar();
-		List<Filme> filmes = new ArrayList<>();
+		List<Pessoa> filmes = new ArrayList<>();
 		String sql = "SELECT cod, title, genero FROM FILMES";
 		try (PreparedStatement statement = connection.prepareStatement(sql);
 				ResultSet resultSet = statement.executeQuery()) {
 			while(resultSet.next()) {
-				filmes.add(new Filme(resultSet.getInt("cod"), resultSet.getString("title"), 
+				filmes.add(new Pessoa(resultSet.getInt("cod"), resultSet.getString("title"), 
 						resultSet.getString("genero"), null));
 				comboBox.addItem(resultSet.getInt("cod"));
 			}
@@ -203,7 +203,7 @@ public class GDI extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String sql = "INSERT INTO filmes(cod, title, genero, foto) VALUES(?,?,?,?)";
 				try (PreparedStatement statement = connection.prepareStatement(sql)) {
-					Filme filme = new Filme(new Integer(codigoFilme.getText()), tituloFilme.getText(), 
+					Pessoa filme = new Pessoa(new Integer(codigoFilme.getText()), tituloFilme.getText(), 
 							generoFilme.getText(), foto);
 					statement.setInt(1, filme.getCod());
 					statement.setString(2, filme.getTitulo());
