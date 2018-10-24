@@ -37,25 +37,19 @@ import javax.swing.JTable;
 import javax.swing.JComboBox;
 public class GDI extends JFrame {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUIDPessoa = 1L;
 	private JPanel contentPane;
 	private JFileChooser chooser;
 	private File file;
-	private JTextField codigoFilme;
-	private JTextField tituloFilme;
-	private JTextField anoFilme;
-	private JTextField generoFilme;
-	private JTextField codigoRoteiro;
-	private JTextField classificacaoFilme;
-	private JTextField notaFilme;
-	private JTextField orcamentoFilme;
+	private JTextField IDPessoa;
+	private JTextField nomePessoa;
 	private JLabel labelFotoQuery;
 	private JComboBox comboBox;
 	
 	private Connection connection;
 	private BufferedImage foto;
 	
-	FilmeTableModel tabela = new FilmeTableModel();
+	PessoaTableModel tabela = new PessoaTableModel();
 	private JTable table;
 	
 	/**
@@ -74,27 +68,26 @@ public class GDI extends JFrame {
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
 		try {
 			connection = DriverManager.getConnection(url, "gp05", "gdi123");
-			tabela.addListaDeFilme(getFilmes());
+			tabela.addListaDePessoa(getPessoas());
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Erro ao conectar com o Banco de Dados.");
 		}
 	}
 	
-	public List<Pessoa> getFilmes() {
+	public List<Pessoa> getPessoas() {
 		tabela.limpar();
-		List<Pessoa> filmes = new ArrayList<>();
-		String sql = "SELECT cod, title, genero FROM FILMES";
+		List<Pessoa> pessoa = new ArrayList<>();
+		String sql = "SELECT id, nome FROM Pessoa";
 		try (PreparedStatement statement = connection.prepareStatement(sql);
 				ResultSet resultSet = statement.executeQuery()) {
 			while(resultSet.next()) {
-				filmes.add(new Pessoa(resultSet.getInt("cod"), resultSet.getString("title"), 
-						resultSet.getString("genero"), null));
-				comboBox.addItem(resultSet.getInt("cod"));
+				pessoa.add(new Pessoa(resultSet.getInt("id"), resultSet.getString("nome"), null));
+				comboBox.addItem(resultSet.getInt("id"));
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Erro ao selecionar do Banco de Dados.");
 		}
-		return filmes;
+		return pessoa;
 	}
 
 	/**
@@ -108,76 +101,23 @@ public class GDI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		codigoFilme = new JTextField();
-		codigoFilme.setBounds(635, 121, 168, 20);
-		contentPane.add(codigoFilme);
-		codigoFilme.setColumns(10);
+		IDPessoa = new JTextField();
+		IDPessoa.setBounds(635, 121, 168, 20);
+		contentPane.add(IDPessoa);
+		IDPessoa.setColumns(10);
 		
-		JLabel lblCodigoDoFilme = new JLabel("Codigo do filme:");
-		lblCodigoDoFilme.setBounds(635, 96, 134, 14);
-		contentPane.add(lblCodigoDoFilme);
+		JLabel lblIDPessoa = new JLabel("ID da pessoa:");
+		lblIDPessoa.setBounds(635, 96, 134, 14);
+		contentPane.add(lblIDPessoa);
 		
-		JLabel lblTtuloDoFilme = new JLabel("T\u00EDtulo do filme:");
-		lblTtuloDoFilme.setBounds(635, 152, 168, 14);
-		contentPane.add(lblTtuloDoFilme);
+		JLabel lblNomePessoa = new JLabel("Nome da pessoa:");
+		lblNomePessoa.setBounds(635, 152, 168, 14);
+		contentPane.add(lblNomePessoa);
 		
-		tituloFilme = new JTextField();
-		tituloFilme.setBounds(635, 177, 168, 20);
-		tituloFilme.setColumns(10);
-		contentPane.add(tituloFilme);
-		
-		JLabel lblAnoDeProduo = new JLabel("Ano de produ\u00E7\u00E3o:");
-		lblAnoDeProduo.setBounds(635, 208, 168, 14);
-		contentPane.add(lblAnoDeProduo);
-		
-		anoFilme = new JTextField();
-		anoFilme.setBounds(635, 233, 168, 20);
-		anoFilme.setColumns(10);
-		contentPane.add(anoFilme);
-		
-		JLabel lblGnero = new JLabel("G\u00EAnero:");
-		lblGnero.setBounds(635, 264, 168, 14);
-		contentPane.add(lblGnero);
-		
-		generoFilme = new JTextField();
-		generoFilme.setBounds(635, 289, 168, 20);
-		generoFilme.setColumns(10);
-		contentPane.add(generoFilme);
-		
-		JLabel lblCdigoRoteiro = new JLabel("C\u00F3digo Roteiro");
-		lblCdigoRoteiro.setBounds(841, 264, 168, 14);
-		contentPane.add(lblCdigoRoteiro);
-		
-		codigoRoteiro = new JTextField();
-		codigoRoteiro.setBounds(841, 289, 168, 20);
-		codigoRoteiro.setColumns(10);
-		contentPane.add(codigoRoteiro);
-		
-		JLabel lblClassificaoIndicativa = new JLabel("Classifica\u00E7\u00E3o indicativa:");
-		lblClassificaoIndicativa.setBounds(841, 96, 168, 14);
-		contentPane.add(lblClassificaoIndicativa);
-		
-		classificacaoFilme = new JTextField();
-		classificacaoFilme.setBounds(841, 121, 168, 20);
-		classificacaoFilme.setColumns(10);
-		contentPane.add(classificacaoFilme);
-		
-		JLabel lblNotaCrtica = new JLabel("Nota Cr\u00EDtica:");
-		lblNotaCrtica.setBounds(841, 152, 157, 14);
-		contentPane.add(lblNotaCrtica);
-		
-		notaFilme = new JTextField();
-		notaFilme.setBounds(841, 177, 168, 20);
-		notaFilme.setColumns(10);
-		contentPane.add(notaFilme);
-		
-		JLabel lblOramento = new JLabel("Or\u00E7amento:");
-		lblOramento.setBounds(841, 208, 168, 14);
-		contentPane.add(lblOramento);
-		
-		JLabel lblFilmeGdi = new JLabel("Filme GDI:");
-		lblFilmeGdi.setBounds(20, 11, 78, 14);
-		contentPane.add(lblFilmeGdi);
+		nomePessoa = new JTextField();
+		nomePessoa.setBounds(635, 177, 168, 20);
+		nomePessoa.setColumns(10);
+		contentPane.add(nomePessoa);
 		
 		JLabel labelFoto = new JLabel("");
 		labelFoto.setBounds(841, 340, 223, 203);
@@ -187,27 +127,20 @@ public class GDI extends JFrame {
 		labelFotoQuery.setBounds(46, 340, 345, 216);
 		contentPane.add(labelFotoQuery);
 		
-		orcamentoFilme = new JTextField();
-		orcamentoFilme.setBounds(841, 233, 168, 20);
-		orcamentoFilme.setColumns(10);
-		contentPane.add(orcamentoFilme);
-		
 		comboBox = new JComboBox();
 		comboBox.setBounds(420, 362, 157, 20);
 		contentPane.add(comboBox);
-		comboBox.addItem("-- Escolha um filme --");
+		comboBox.addItem("-- Escolha uma pessoa --");
 		
 		JButton btnInserir = new JButton("Inserir");
 		btnInserir.setBounds(650, 320, 140, 23);
 		btnInserir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String sql = "INSERT INTO filmes(cod, title, genero, foto) VALUES(?,?,?,?)";
+				String sql = "INSERT INTO filmes(id, title, genero, foto) VALUES(?,?,?,?)";
 				try (PreparedStatement statement = connection.prepareStatement(sql)) {
-					Pessoa filme = new Pessoa(new Integer(codigoFilme.getText()), tituloFilme.getText(), 
-							generoFilme.getText(), foto);
-					statement.setInt(1, filme.getCod());
-					statement.setString(2, filme.getTitulo());
-					statement.setString(3, filme.getGenero());
+					Pessoa pessoa = new Pessoa(new Integer(IDPessoa.getText()), nomePessoa.getText(), foto);
+					statement.setInt(1, pessoa.getID());
+					statement.setString(2, pessoa.getNome());
 					InputStream is = null;
 		            try {
 		                ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -218,13 +151,12 @@ public class GDI extends JFrame {
 		            }
 		            statement.setBlob(4, is);
 					statement.executeUpdate();
-					tabela.addListaDeFilme(getFilmes());
+					tabela.addListaDePessoa(getPessoas());
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(null, "Erro ao inserir um filme.");
 				}
-				tituloFilme.setText("");
-				codigoFilme.setText("");
-				generoFilme.setText("");
+				nomePessoa.setText("");
+				IDPessoa.setText("");
 				labelFoto.setIcon(null);
 			}
 		});
@@ -263,7 +195,7 @@ public class GDI extends JFrame {
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 	            BufferedImage imagem;
-	            String sql = "Select foto from filmes where cod = '" + comboBox.getSelectedItem() + "'";
+	            String sql = "Select foto from filmes where id = '" + comboBox.getSelectedItem() + "'";
 	            try (PreparedStatement statement = connection.prepareStatement(sql);
 	            		ResultSet resultSet = statement.executeQuery()) {
 	            	while (resultSet.next()) {
